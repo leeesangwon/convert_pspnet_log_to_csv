@@ -5,8 +5,19 @@ Convert pspnet log to csv file
 import csv
 from collections import namedtuple
 import re
+import argparse
+import sys
+
+assert sys.version_info >= (3, 5, 0), 'use python 3.5.0 or later'
 
 IoU_line = namedtuple("IoU_line", ["class_index", "class_name", "iou"])
+
+def main():
+    PARSER = argparse.ArgumentParser()
+    PARSER.add_argument("log_file_path", type=str, help="path to the log file to convert")
+    PARSER.add_argument("csv_file_path", type=str, help="path to the csv file to save result")
+    ARGS = PARSER.parse_args()
+    convert_pspnet_log_to_csv(ARGS.log_file_path, ARGS.csv_file_path)
 
 def convert_pspnet_log_to_csv(pspnet_log_path, csv_path):
     with open(pspnet_log_path) as f:
@@ -71,4 +82,4 @@ def write_csv_file(csv_path, iou_lines, mean_iou, pixel_wise_accuracy):
         writer.writerow(value_row)
 
 if __name__=='__main__':
-    convert_pspnet_log_to_csv('pspnet50_ADE20K_1-150.log', csv_path='result.csv')
+    main()
